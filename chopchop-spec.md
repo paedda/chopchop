@@ -1,23 +1,24 @@
 # ChopChop
 
-A URL shortener implemented in five backend languages, same API contract, same database schema. Built to demonstrate idiomatic backend development across different ecosystems.
+A URL shortener implemented in six backend languages, same API contract, same database schema. Built to demonstrate idiomatic backend development across different ecosystems.
 
 ## Languages & Frameworks
 
 | Language   | Framework    | Port |
-|------------|-------------|------|
-| PHP        | Symfony     | 8001 |
-| Python     | FastAPI     | 8002 |
-| TypeScript | Express     | 8003 |
-| Elixir     | Phoenix     | 8004 |
-| Java       | Spring Boot | 8005 |
+|------------|--------------|------|
+| PHP        | Symfony      | 8001 |
+| Python     | FastAPI      | 8002 |
+| TypeScript | Express      | 8003 |
+| Elixir     | Phoenix      | 8004 |
+| Java       | Spring Boot  | 8005 |
+| Go         | net/http     | 8006 |
 
 ## Monorepo Structure
 
 ```
 chopchop/
 ├── README.md                  # Project overview + language comparison
-├── docker-compose.yml         # Spins up all 5 backends + shared DB
+├── docker-compose.yml         # Spins up all 6 backends + shared DB
 ├── schema.sql                 # Shared database schema
 │
 ├── php-symfony/
@@ -46,13 +47,18 @@ chopchop/
 │   ├── pom.xml
 │   └── src/
 │
+├── go-nethttp/
+│   ├── Dockerfile
+│   ├── go.mod
+│   └── main.go
+│
 └── tests/
     └── api-tests.sh           # Shared test script that runs against any port
 ```
 
 ## Database Schema (PostgreSQL)
 
-All five backends share one Postgres instance with the same schema.
+All six backends share one Postgres instance with the same schema.
 
 ```sql
 CREATE TABLE links (
@@ -218,6 +224,13 @@ services:
       - "8005:8000"
     depends_on:
       - db
+
+  go-nethttp:
+    build: ./go-nethttp
+    ports:
+      - "8006:8000"
+    depends_on:
+      - db
 ```
 
 ## Shared API Test Script
@@ -227,7 +240,10 @@ A bash script using `curl` that runs the same test suite against any port:
 ```bash
 ./tests/api-tests.sh 8001   # test PHP
 ./tests/api-tests.sh 8002   # test Python
-# etc.
+./tests/api-tests.sh 8003   # test TypeScript
+./tests/api-tests.sh 8004   # test Elixir
+./tests/api-tests.sh 8005   # test Java
+./tests/api-tests.sh 8006   # test Go
 ```
 
 Tests to include:
@@ -249,3 +265,5 @@ The root README should include a comparison covering:
 - Avg response time under load (optional, using `wrk` or `hey`)
 - Notable idiomatic patterns used in each language
 - Developer experience notes (setup friction, debugging, tooling)
+
+Languages: PHP/Symfony, Python/FastAPI, TypeScript/Express, Elixir/Phoenix, Java/Spring Boot, Go/net/http

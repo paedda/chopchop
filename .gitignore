@@ -20,6 +20,9 @@ elixir-phoenix/deps/
 java-springboot/target/
 java-springboot/.mvn/
 
+# Go
+go-nethttp/bin/
+
 # Docker volumes / IDE
 .DS_Store
 .idea/
