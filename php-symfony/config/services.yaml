@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true       # Automatically injects constructor dependencies by type-hint
+        autoconfigure: true  # Automatically tags services (e.g. console commands, event listeners)
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Entity/'
+            - '../src/Kernel.php'
