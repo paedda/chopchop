@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: chopchop
+      POSTGRES_USER: chopchop
+      POSTGRES_PASSWORD: chopchop
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chopchop"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  php-symfony:
+    build: ./php-symfony
+    ports:
+      - "8001:8000"
+    environment:
+      APP_ENV: prod
+      APP_SECRET: changeme_in_production
+      DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:

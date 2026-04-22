@@ -1,0 +1,27 @@
+# PHP / Symfony
+php-symfony/vendor/
+php-symfony/var/
+php-symfony/.env.local
+php-symfony/.env.*.local
+
+# Python
+python-fastapi/__pycache__/
+python-fastapi/.venv/
+
+# Node
+ts-express/node_modules/
+ts-express/dist/
+
+# Elixir
+elixir-phoenix/_build/
+elixir-phoenix/deps/
+
+# Java
+java-springboot/target/
+java-springboot/.mvn/
+
+# Docker volumes / IDE
+.DS_Store
+.idea/
+.vscode/
+.claude/
