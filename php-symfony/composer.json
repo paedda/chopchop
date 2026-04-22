@@ -2,6 +2,10 @@
     "name": "chopchop/php-symfony",
     "description": "ChopChop URL shortener — PHP/Symfony implementation",
     "type": "project",
+    "require-dev": {
+        "phpunit/phpunit": "^11",
+        "symfony/test-pack": "^1.1"
+    },
     "require": {
         "php": ">=8.2",
         "ext-pdo": "*",

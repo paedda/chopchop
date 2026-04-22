@@ -13,6 +13,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * Handles all four ChopChop API endpoints.
+ *
+ * Route priority (Symfony matches top-to-bottom within a controller):
+ *   /health and /shorten are static and matched before /{code}.
+ *   /stats/{code} has two path segments so it never conflicts with /{code}.
+ */
 class LinkController extends AbstractController
 {
     public function __construct(
@@ -21,6 +28,13 @@ class LinkController extends AbstractController
         private readonly CodeGenerator $codeGenerator,
     ) {}
 
+    /**
+     * Returns the health status of this backend.
+     *
+     * GET /health
+     *
+     * @return JsonResponse 200 {"status":"ok","language":"php","framework":"symfony"}
+     */
     #[Route('/health', name: 'health', methods: ['GET'])]
     public function health(): JsonResponse
     {
@@ -31,6 +45,23 @@ class LinkController extends AbstractController
         ]);
     }
 
+    /**
+     * Creates a short link and returns its details.
+     *
+     * POST /shorten
+     *
+     * Request body (JSON):
+     *   - url          string   required  Valid HTTP or HTTPS URL to shorten
+     *   - custom_code  string   optional  3–20 alphanumeric characters or hyphens
+     *   - expires_in   int      optional  Seconds until expiry; max 2 592 000 (30 days)
+     *
+     * @param Request $request Incoming POST request with a JSON body
+     *
+     * @return JsonResponse 201 on success
+     *                      400 if the URL is invalid, custom_code format is wrong,
+     *                          or expires_in is out of range
+     *                      409 if the requested custom_code is already taken
+     */
     #[Route('/shorten', name: 'shorten', methods: ['POST'])]
     public function shorten(Request $request): JsonResponse
     {
@@ -90,6 +121,19 @@ class LinkController extends AbstractController
         ], Response::HTTP_CREATED);
     }
 
+    /**
+     * Returns click statistics for a short link.
+     *
+     * GET /stats/{code}
+     *
+     * Clicks are fetched via a single JOIN query (no N+1). The response
+     * includes all-time total_clicks and the 10 most recent clicks, newest first.
+     *
+     * @param string $code Short code to look up
+     *
+     * @return JsonResponse 200 with link metadata and click stats
+     *                      404 if the code does not exist
+     */
     #[Route('/stats/{code}', name: 'stats', methods: ['GET'])]
     public function stats(string $code): JsonResponse
     {
@@ -118,6 +162,21 @@ class LinkController extends AbstractController
         ]);
     }
 
+    /**
+     * Redirects to the original URL and records a click.
+     *
+     * GET /{code}
+     *
+     * The click is persisted before the redirect so that the record is never
+     * lost even if the client drops the connection mid-response.
+     *
+     * @param string  $code    Short code to resolve
+     * @param Request $request Used to capture click metadata (IP, user-agent, referer)
+     *
+     * @return Response 301 redirect to the original URL
+     *                  404 if the code does not exist
+     *                  410 if the link has passed its expiry time
+     */
     #[Route('/{code}', name: 'redirect', methods: ['GET'])]
     public function redirectToUrl(string $code, Request $request): Response
     {
