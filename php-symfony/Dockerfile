@@ -1,6 +1,9 @@
 FROM php:8.3-cli-alpine
 
-RUN apk add --no-cache postgresql-dev git unzip \
+# libpq is the PostgreSQL client runtime library needed by pdo_pgsql.so at load
+# time. It must be installed explicitly so that removing postgresql-dev (which
+# only provides the compile-time headers) does not strip libpq from the image.
+RUN apk add --no-cache git unzip libpq postgresql-dev \
     && docker-php-ext-install pdo pdo_pgsql \
     && apk del postgresql-dev
 
@@ -10,7 +13,8 @@ WORKDIR /app
 
 # Install dependencies first (cached layer)
 COPY composer.json composer.lock* ./
-RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction
+RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction \
+        --ignore-platform-req=ext-pdo_pgsql
 
 # Copy app source
 COPY . .
