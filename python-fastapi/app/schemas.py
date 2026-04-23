@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict
 
 
 class ShortenRequest(BaseModel):
-    """Request body for POST /shorten.
+    """Request body for POST /chop.
 
     All fields are optional at the schema level; semantic validation
     (URL format, code charset, expires_in range) is done in the route handler

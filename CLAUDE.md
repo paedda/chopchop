@@ -41,7 +41,7 @@ docker compose up --build php-symfony db
 
 | Endpoint | Method | Success | Notes |
 |---|---|---|---|
-| `/shorten` | POST | 201 | Body: `url` (required), `custom_code` (optional), `expires_in` (optional, seconds) |
+| `/chop` | POST | 201 | Body: `url` (required), `custom_code` (optional), `expires_in` (optional, seconds) |
 | `/:code` | GET | 301 | Redirects; records click; 404 unknown, 410 expired |
 | `/stats/:code` | GET | 200 | Returns click count + last 10 clicks |
 | `/health` | GET | 200 | Returns `{status, language, framework}` |
@@ -82,6 +82,6 @@ Tables: `links` (code, url, created_at, expires_at) and `clicks` (link_id FK, cl
 ## PHP/Symfony specifics
 
 - Symfony 7.2, PHP 8.3, Doctrine ORM 3.x
-- Routes declared in `LinkController` top-to-bottom; static routes (`/health`, `/shorten`, `/stats/{code}`) are matched before the catch-all `/{code}`
+- Routes declared in `LinkController` top-to-bottom; static routes (`/health`, `/chop`, `/stats/{code}`) are matched before the catch-all `/{code}`
 - Cache is warmed up in `entrypoint.sh` at container start
 - `APP_SECRET` is set via Docker environment — do not hardcode it

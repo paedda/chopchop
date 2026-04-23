@@ -35,17 +35,17 @@ async def health() -> dict:
 
 
 @router.post(
-    "/shorten",
+    "/chop",
     response_model=ShortenResponse,
     status_code=201,
     summary="Create a short link",
 )
-async def shorten(
+async def chop(
     body: ShortenRequest,
     request: Request,
     session: AsyncSession = Depends(get_session),
 ) -> ShortenResponse:
-    """Shorten a URL, optionally with a custom code and expiry.
+    """Chop a URL into a short link, optionally with a custom code and expiry.
 
     - **url**: valid HTTP or HTTPS URL (required)
     - **custom_code**: 3–20 alphanumeric characters or hyphens (optional)

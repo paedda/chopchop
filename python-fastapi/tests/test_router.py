@@ -43,38 +43,38 @@ def test_health_returns_correct_identity(client: TestClient) -> None:
     assert body["framework"] == "fastapi"
 
 
-# ── POST /shorten — validation ────────────────────────────────────────────────
+# ── POST /chop — validation ────────────────────────────────────────────────
 
 def test_shorten_returns_400_for_missing_url(client: TestClient) -> None:
-    assert client.post("/shorten", json={}).status_code == 400
+    assert client.post("/chop", json={}).status_code == 400
 
 
 def test_shorten_returns_400_for_non_http_url(client: TestClient) -> None:
-    assert client.post("/shorten", json={"url": "ftp://example.com"}).status_code == 400
+    assert client.post("/chop", json={"url": "ftp://example.com"}).status_code == 400
 
 
 def test_shorten_returns_400_for_invalid_url(client: TestClient) -> None:
-    assert client.post("/shorten", json={"url": "not-a-url"}).status_code == 400
+    assert client.post("/chop", json={"url": "not-a-url"}).status_code == 400
 
 
 def test_shorten_returns_400_for_short_custom_code(client: TestClient) -> None:
     payload = {"url": "https://example.com", "custom_code": "ab"}  # too short
-    assert client.post("/shorten", json=payload).status_code == 400
+    assert client.post("/chop", json=payload).status_code == 400
 
 
 def test_shorten_returns_400_for_custom_code_with_spaces(client: TestClient) -> None:
     payload = {"url": "https://example.com", "custom_code": "bad code"}
-    assert client.post("/shorten", json=payload).status_code == 400
+    assert client.post("/chop", json=payload).status_code == 400
 
 
 def test_shorten_returns_400_for_expires_in_zero(client: TestClient) -> None:
     payload = {"url": "https://example.com", "expires_in": 0}
-    assert client.post("/shorten", json=payload).status_code == 400
+    assert client.post("/chop", json=payload).status_code == 400
 
 
 def test_shorten_returns_400_for_expires_in_too_large(client: TestClient) -> None:
     payload = {"url": "https://example.com", "expires_in": 9_999_999}
-    assert client.post("/shorten", json=payload).status_code == 400
+    assert client.post("/chop", json=payload).status_code == 400
 
 
 def test_shorten_returns_409_for_duplicate_custom_code(
@@ -82,16 +82,16 @@ def test_shorten_returns_409_for_duplicate_custom_code(
 ) -> None:
     db.scalar.return_value = make_link("taken")  # code already exists
     payload = {"url": "https://example.com", "custom_code": "taken"}
-    assert client.post("/shorten", json=payload).status_code == 409
+    assert client.post("/chop", json=payload).status_code == 409
 
 
-# ── POST /shorten — success ───────────────────────────────────────────────────
+# ── POST /chop — success ───────────────────────────────────────────────────
 
 def test_shorten_returns_201_with_generated_code(
     client: TestClient, db: AsyncMock
 ) -> None:
     with patch("app.router.generate_code", return_value="abc123"):
-        response = client.post("/shorten", json={"url": "https://example.com/path"})
+        response = client.post("/chop", json={"url": "https://example.com/path"})
 
     assert response.status_code == 201
     body = response.json()
@@ -106,7 +106,7 @@ def test_shorten_returns_201_with_custom_code(
 ) -> None:
     db.scalar.return_value = None  # code is free
     response = client.post(
-        "/shorten", json={"url": "https://example.com", "custom_code": "my-link"}
+        "/chop", json={"url": "https://example.com", "custom_code": "my-link"}
     )
     assert response.status_code == 201
     assert response.json()["code"] == "my-link"
@@ -117,7 +117,7 @@ def test_shorten_sets_expires_at_when_expires_in_given(
 ) -> None:
     with patch("app.router.generate_code", return_value="xyz789"):
         response = client.post(
-            "/shorten", json={"url": "https://example.com", "expires_in": 3600}
+            "/chop", json={"url": "https://example.com", "expires_in": 3600}
         )
     assert response.status_code == 201
     assert response.json()["expires_at"] is not None

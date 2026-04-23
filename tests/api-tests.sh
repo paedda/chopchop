@@ -35,11 +35,11 @@ echo "  $body"
 
 # ── shorten a URL ─────────────────────────────────────────────────────────────
 
-resp=$(curl -s -o /tmp/cc_body -w "%{http_code}" -X POST "$BASE/shorten" \
+resp=$(curl -s -o /tmp/cc_body -w "%{http_code}" -X POST "$BASE/chop" \
     -H "Content-Type: application/json" \
     -d '{"url":"https://example.com/a/very/long/path"}')
 body=$(cat /tmp/cc_body)
-check "POST /shorten returns 201" 201 "$resp" "$body"
+check "POST /chop returns 201" 201 "$resp" "$body"
 
 # Extract the generated code
 CODE=$(echo "$body" | grep -o '"code":"[^"]*"' | head -1 | cut -d'"' -f4)
@@ -72,35 +72,35 @@ fi
 # ── custom code ───────────────────────────────────────────────────────────────
 
 CUSTOM="testcode$RANDOM"
-resp=$(curl -s -o /tmp/cc_body -w "%{http_code}" -X POST "$BASE/shorten" \
+resp=$(curl -s -o /tmp/cc_body -w "%{http_code}" -X POST "$BASE/chop" \
     -H "Content-Type: application/json" \
     -d "{\"url\":\"https://example.com\",\"custom_code\":\"$CUSTOM\"}")
 body=$(cat /tmp/cc_body)
-check "POST /shorten with custom_code returns 201" 201 "$resp" "$body"
+check "POST /chop with custom_code returns 201" 201 "$resp" "$body"
 
 # ── duplicate custom code → 409 ───────────────────────────────────────────────
 
-resp=$(curl -s -o /tmp/cc_body -w "%{http_code}" -X POST "$BASE/shorten" \
+resp=$(curl -s -o /tmp/cc_body -w "%{http_code}" -X POST "$BASE/chop" \
     -H "Content-Type: application/json" \
     -d "{\"url\":\"https://example.com\",\"custom_code\":\"$CUSTOM\"}")
 body=$(cat /tmp/cc_body)
-check "POST /shorten duplicate custom_code returns 409" 409 "$resp" "$body"
+check "POST /chop duplicate custom_code returns 409" 409 "$resp" "$body"
 
 # ── invalid URL → 400 ─────────────────────────────────────────────────────────
 
-resp=$(curl -s -o /tmp/cc_body -w "%{http_code}" -X POST "$BASE/shorten" \
+resp=$(curl -s -o /tmp/cc_body -w "%{http_code}" -X POST "$BASE/chop" \
     -H "Content-Type: application/json" \
     -d '{"url":"not-a-url"}')
 body=$(cat /tmp/cc_body)
-check "POST /shorten invalid URL returns 400" 400 "$resp" "$body"
+check "POST /chop invalid URL returns 400" 400 "$resp" "$body"
 
 # ── expired link → 410 ────────────────────────────────────────────────────────
 
-resp=$(curl -s -o /tmp/cc_body -w "%{http_code}" -X POST "$BASE/shorten" \
+resp=$(curl -s -o /tmp/cc_body -w "%{http_code}" -X POST "$BASE/chop" \
     -H "Content-Type: application/json" \
     -d '{"url":"https://example.com","expires_in":1}')
 body=$(cat /tmp/cc_body)
-check "POST /shorten with expires_in returns 201" 201 "$resp" "$body"
+check "POST /chop with expires_in returns 201" 201 "$resp" "$body"
 
 EXP_CODE=$(echo "$body" | grep -o '"code":"[^"]*"' | head -1 | cut -d'"' -f4)
 echo "  waiting 2s for link to expire..."

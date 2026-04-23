@@ -33,12 +33,12 @@ All backends share one Postgres 16 container. The schema is applied automaticall
 
 All implementations expose the same four endpoints. Examples below use port 8001 (PHP).
 
-### `POST /shorten`
+### `POST /chop`
 
 Create a short link.
 
 ```bash
-curl -X POST http://localhost:8001/shorten \
+curl -X POST http://localhost:8001/chop \
   -H "Content-Type: application/json" \
   -d '{
     "url": "https://example.com/a/very/long/path",
@@ -184,7 +184,7 @@ A shared `curl`-based test suite covers all endpoints. Run it against any backen
 Tests covered:
 
 - `GET /health` returns 200 with correct language/framework
-- `POST /shorten` returns 201 with a generated code
+- `POST /chop` returns 201 with a generated code
 - `GET /:code` issues a 301 redirect
 - Following the redirect resolves to the original URL
 - `GET /stats/:code` increments `total_clicks` after a redirect

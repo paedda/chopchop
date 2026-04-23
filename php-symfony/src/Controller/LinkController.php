@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
  * Handles all four ChopChop API endpoints.
  *
  * Route priority (Symfony matches top-to-bottom within a controller):
- *   /health and /shorten are static and matched before /{code}.
+ *   /health and /chop are static and matched before /{code}.
  *   /stats/{code} has two path segments so it never conflicts with /{code}.
  */
 class LinkController extends AbstractController
@@ -48,7 +48,7 @@ class LinkController extends AbstractController
     /**
      * Creates a short link and returns its details.
      *
-     * POST /shorten
+     * POST /chop
      *
      * Request body (JSON):
      *   - url          string   required  Valid HTTP or HTTPS URL to shorten
@@ -62,8 +62,8 @@ class LinkController extends AbstractController
      *                          or expires_in is out of range
      *                      409 if the requested custom_code is already taken
      */
-    #[Route('/shorten', name: 'shorten', methods: ['POST'])]
-    public function shorten(Request $request): JsonResponse
+    #[Route('/chop', name: 'chop', methods: ['POST'])]
+    public function chop(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true) ?? [];
 

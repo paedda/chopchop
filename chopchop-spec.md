@@ -87,7 +87,7 @@ CREATE INDEX idx_clicks_link_id ON clicks(link_id);
 
 All implementations must expose identical endpoints with identical request/response shapes.
 
-### POST /shorten
+### POST /chop
 
 Create a short link.
 

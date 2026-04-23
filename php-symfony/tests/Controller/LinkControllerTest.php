@@ -59,7 +59,7 @@ class LinkControllerTest extends TestCase
         $this->assertSame('symfony', $body['framework']);
     }
 
-    // ── POST /shorten — validation ────────────────────────────────────────────
+    // ── POST /chop — validation ────────────────────────────────────────────
 
     public function testShortenReturns400ForMissingUrl(): void
     {
@@ -122,7 +122,7 @@ class LinkControllerTest extends TestCase
         $this->assertSame(409, $response->getStatusCode());
     }
 
-    // ── POST /shorten — success ───────────────────────────────────────────────
+    // ── POST /chop — success ───────────────────────────────────────────────
 
     public function testShortenReturns201WithGeneratedCode(): void
     {
