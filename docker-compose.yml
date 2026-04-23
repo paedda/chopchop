@@ -58,15 +58,15 @@ services:
       db:
         condition: service_healthy
 
-  # java-springboot:
-  #   build: ./java-springboot
-  #   ports:
-  #     - "8005:8000"
-  #   environment:
-  #     DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  java-springboot:
+    build: ./java-springboot
+    ports:
+      - "8005:8000"
+    environment:
+      DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
+    depends_on:
+      db:
+        condition: service_healthy
 
   # go-nethttp:
   #   build: ./go-nethttp

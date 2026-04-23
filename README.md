@@ -10,7 +10,7 @@ A URL shortener implemented in six backend languages against an identical API co
 | Python | FastAPI | 8002 | ✅ done |
 | TypeScript | Express | 8003 | ✅ done |
 | Elixir | Phoenix | 8004 | ✅ done |
-| Java | Spring Boot | 8005 | 🔜 planned |
+| Java | Spring Boot | 8005 | ✅ done |
 | Go | net/http | 8006 | 🔜 planned |
 
 ## Quick start
@@ -265,6 +265,15 @@ chopchop/
 │           ├── endpoint.ex
 │           ├── router.ex
 │           └── controllers/link_controller.ex
-├── java-springboot/        # planned
+├── java-springboot/
+│   ├── Dockerfile
+│   ├── pom.xml
+│   └── src/main/java/com/chopchop/
+│       ├── ChopchopApplication.java
+│       ├── DataSourceConfig.java
+│       ├── controller/{LinkController,GlobalExceptionHandler}.java
+│       ├── model/{Link,Click}.java
+│       ├── repository/{Link,Click}Repository.java
+│       └── service/CodeGenerator.java
 └── go-nethttp/             # planned
 ```
