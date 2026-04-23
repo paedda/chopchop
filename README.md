@@ -1,6 +1,6 @@
 # ChopChop
 
-A URL shortener implemented in six backend languages against an identical API contract and shared PostgreSQL database. Built to demonstrate idiomatic backend development across different ecosystems.
+A URL shortener implemented in multiple backend languages against an identical API contract and shared PostgreSQL database. Built to demonstrate idiomatic backend development across different ecosystems.
 
 ## Implementations
 
@@ -12,6 +12,8 @@ A URL shortener implemented in six backend languages against an identical API co
 | Elixir | Phoenix | 8004 | ✅ done |
 | Java | Spring Boot | 8005 | ✅ done |
 | Go | net/http | 8006 | ✅ done |
+| Ruby | Sinatra | 8007 | ✅ done |
+| C# | ASP.NET Core | 8008 | ✅ done |
 
 ## Quick start
 
@@ -179,6 +181,8 @@ A shared `curl`-based test suite covers all endpoints. Run it against any backen
 ./tests/api-tests.sh 8004   # Elixir/Phoenix
 ./tests/api-tests.sh 8005   # Java/Spring Boot
 ./tests/api-tests.sh 8006   # Go/net/http
+./tests/api-tests.sh 8007   # Ruby/Sinatra
+./tests/api-tests.sh 8008   # C#/ASP.NET Core
 ```
 
 Tests covered:
@@ -275,11 +279,20 @@ chopchop/
 │       ├── model/{Link,Click}.java
 │       ├── repository/{Link,Click}Repository.java
 │       └── service/CodeGenerator.java
-└── go-nethttp/
+├── go-nethttp/
+│   ├── Dockerfile
+│   ├── go.mod
+│   ├── main.go
+│   ├── handler.go
+│   ├── codegen.go
+│   └── ordered_map.go
+├── ruby-sinatra/
+│   ├── Dockerfile
+│   ├── Gemfile
+│   ├── config.ru
+│   └── app.rb
+└── csharp-aspnet/
     ├── Dockerfile
-    ├── go.mod
-    ├── main.go
-    ├── handler.go
-    ├── codegen.go
-    └── ordered_map.go
+    ├── chopchop.csproj
+    └── Program.cs
 ```

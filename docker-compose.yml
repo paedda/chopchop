@@ -78,5 +78,25 @@ services:
       db:
         condition: service_healthy
 
+  ruby-sinatra:
+    build: ./ruby-sinatra
+    ports:
+      - "8007:8000"
+    environment:
+      DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
+    depends_on:
+      db:
+        condition: service_healthy
+
+  csharp-aspnet:
+    build: ./csharp-aspnet
+    ports:
+      - "8008:8000"
+    environment:
+      DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   db_data:
