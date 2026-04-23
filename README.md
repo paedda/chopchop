@@ -8,7 +8,7 @@ A URL shortener implemented in six backend languages against an identical API co
 |---|---|---|---|
 | PHP | Symfony 7 | 8001 | ✅ done |
 | Python | FastAPI | 8002 | ✅ done |
-| TypeScript | Express | 8003 | 🔜 planned |
+| TypeScript | Express | 8003 | ✅ done |
 | Elixir | Phoenix | 8004 | 🔜 planned |
 | Java | Spring Boot | 8005 | 🔜 planned |
 | Go | net/http | 8006 | 🔜 planned |
@@ -152,7 +152,7 @@ All backends share one Postgres 16 instance with this schema (see `schema.sql`):
 ```sql
 CREATE TABLE links (
     id         SERIAL PRIMARY KEY,
-    code       VARCHAR(10) UNIQUE NOT NULL,
+    code       VARCHAR(20) UNIQUE NOT NULL,
     url        TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     expires_at TIMESTAMP WITH TIME ZONE
@@ -229,8 +229,25 @@ chopchop/
 │       ├── Entity/{Link,Click}.php
 │       ├── Repository/{Link,Click}Repository.php
 │       └── Service/CodeGenerator.php
-├── python-fastapi/         # planned
-├── ts-express/             # planned
+├── python-fastapi/
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   └── app/
+│       ├── main.py
+│       ├── router.py
+│       ├── models.py
+│       ├── schemas.py
+│       ├── database.py
+│       └── codegen.py
+├── ts-express/
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── src/
+│       ├── index.ts
+│       ├── router.ts
+│       ├── db.ts
+│       └── codegen.ts
 ├── elixir-phoenix/         # planned
 ├── java-springboot/        # planned
 └── go-nethttp/             # planned
