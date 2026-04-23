@@ -40,7 +40,11 @@ public class LinkController {
     // GET /health
     @GetMapping("/health")
     public Map<String, String> health() {
-        return Map.of("status", "ok", "language", "java", "framework", "spring boot");
+        Map<String, String> resp = new LinkedHashMap<>();
+        resp.put("status", "ok");
+        resp.put("language", "java");
+        resp.put("framework", "spring boot");
+        return resp;
     }
 
     // POST /chop
