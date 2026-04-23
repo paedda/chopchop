@@ -172,7 +172,13 @@ CREATE TABLE clicks (
 
 ## Running the tests
 
-A shared `curl`-based test suite covers all endpoints. Run it against any backend by passing the port:
+A shared `curl`-based test suite covers all endpoints. To run against all backends at once:
+
+```bash
+./tests/run-all.sh
+```
+
+Or target a specific backend by passing its port:
 
 ```bash
 ./tests/api-tests.sh 8001   # PHP/Symfony
