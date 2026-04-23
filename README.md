@@ -204,14 +204,15 @@ Short codes are generated using base62 encoding (`a-z A-Z 0-9`), defaulting to 6
 
 ## Comparison
 
-_This table will be filled in as implementations are completed._
-
-| | PHP/Symfony | Python/FastAPI | TypeScript/Express | Elixir/Phoenix | Java/Spring Boot | Go/net/http |
-|---|---|---|---|---|---|---|
-| Lines of code | — | — | — | — | — | — |
-| Docker image size | — | — | — | — | — | — |
-| Cold start time | — | — | — | — | — | — |
-| Avg response time | — | — | — | — | — | — |
+| | PHP/Symfony | Python/FastAPI | TS/Express | Elixir/Phoenix | Java/Spring Boot | Go/net/http | Ruby/Sinatra | C#/ASP.NET |
+|---|---|---|---|---|---|---|---|---|
+| Lines of code | 553 | 353 | 209 | 360 | 409 | 374 | 167 | 233 |
+| Source files | 7 | 7 | 4 | 11 | 9 | 4 | 1 | 1 |
+| Dependencies | 11 | 4 | 2 | 5 | 6 | 1 | 4 | 1 |
+| Docker image size | 196 MB | 371 MB | 443 MB | 2.37 GB | 489 MB | 26.3 MB | 765 MB | 360 MB |
+| Memory (idle) | 14 MB | 53 MB | 13 MB | 105 MB | 273 MB | 5 MB | 26 MB | 24 MB |
+| Cold start time | 0.1s | 0.3s | 0.1s | 0.4s | 1.7s | 0.0s | 0.1s | 0.2s |
+| Avg response time | 3.6ms | 2.0ms | 2.3ms | 2.3ms | 3.8ms | 1.9ms | 3.1ms | 2.1ms |
 
 ## Project structure
 
