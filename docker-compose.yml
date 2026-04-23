@@ -28,15 +28,15 @@ services:
       db:
         condition: service_healthy
 
-  # python-fastapi:
-  #   build: ./python-fastapi
-  #   ports:
-  #     - "8002:8000"
-  #   environment:
-  #     DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  python-fastapi:
+    build: ./python-fastapi
+    ports:
+      - "8002:8000"
+    environment:
+      DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
+    depends_on:
+      db:
+        condition: service_healthy
 
   # ts-express:
   #   build: ./ts-express

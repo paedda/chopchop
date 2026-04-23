@@ -7,7 +7,7 @@ A URL shortener implemented in six backend languages against an identical API co
 | Language | Framework | Port | Status |
 |---|---|---|---|
 | PHP | Symfony 7 | 8001 | ✅ done |
-| Python | FastAPI | 8002 | 🔜 planned |
+| Python | FastAPI | 8002 | ✅ done |
 | TypeScript | Express | 8003 | 🔜 planned |
 | Elixir | Phoenix | 8004 | 🔜 planned |
 | Java | Spring Boot | 8005 | 🔜 planned |
