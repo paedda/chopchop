@@ -11,7 +11,7 @@ A URL shortener implemented in six backend languages against an identical API co
 | TypeScript | Express | 8003 | ✅ done |
 | Elixir | Phoenix | 8004 | ✅ done |
 | Java | Spring Boot | 8005 | ✅ done |
-| Go | net/http | 8006 | 🔜 planned |
+| Go | net/http | 8006 | ✅ done |
 
 ## Quick start
 
@@ -275,5 +275,11 @@ chopchop/
 │       ├── model/{Link,Click}.java
 │       ├── repository/{Link,Click}Repository.java
 │       └── service/CodeGenerator.java
-└── go-nethttp/             # planned
+└── go-nethttp/
+    ├── Dockerfile
+    ├── go.mod
+    ├── main.go
+    ├── handler.go
+    ├── codegen.go
+    └── ordered_map.go
 ```

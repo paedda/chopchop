@@ -68,15 +68,15 @@ services:
       db:
         condition: service_healthy
 
-  # go-nethttp:
-  #   build: ./go-nethttp
-  #   ports:
-  #     - "8006:8000"
-  #   environment:
-  #     DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  go-nethttp:
+    build: ./go-nethttp
+    ports:
+      - "8006:8000"
+    environment:
+      DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   db_data:
