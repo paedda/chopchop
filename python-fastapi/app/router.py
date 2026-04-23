@@ -20,10 +20,11 @@ _CUSTOM_CODE_RE = re.compile(r"^[a-zA-Z0-9\-]{3,20}$")
 
 
 def _is_valid_http_url(url: str) -> bool:
-    """Return True if *url* is a well-formed HTTP or HTTPS URL."""
+    """Return True if *url* is a well-formed HTTP or HTTPS URL with a dotted host."""
     try:
         parsed = urlparse(url)
-        return parsed.scheme in ("http", "https") and bool(parsed.netloc)
+        host = parsed.hostname or ""
+        return parsed.scheme in ("http", "https") and "." in host
     except Exception:
         return False
 

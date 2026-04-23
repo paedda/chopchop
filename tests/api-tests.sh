@@ -37,7 +37,7 @@ echo "  $body"
 
 resp=$(curl -s -o /tmp/cc_body -w "%{http_code}" -X POST "$BASE/chop" \
     -H "Content-Type: application/json" \
-    -d '{"url":"https://example.com/a/very/long/path"}')
+    -d '{"url":"https://example.com/"}')
 body=$(cat /tmp/cc_body)
 check "POST /chop returns 201" 201 "$resp" "$body"
 

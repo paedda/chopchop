@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS links (
     id          SERIAL PRIMARY KEY,
-    code        VARCHAR(10) UNIQUE NOT NULL,
+    code        VARCHAR(20) UNIQUE NOT NULL,
     url         TEXT NOT NULL,
     created_at  TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     expires_at  TIMESTAMP WITH TIME ZONE

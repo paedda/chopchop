@@ -24,8 +24,8 @@ class Link
     #[ORM\Column]
     private ?int $id = null;
 
-    /** Unique short code, max 10 characters, base62 alphabet or user-supplied. */
-    #[ORM\Column(length: 10, unique: true)]
+    /** Unique short code, max 20 characters, base62 alphabet or user-supplied. */
+    #[ORM\Column(length: 20, unique: true)]
     private string $code;
 
     /** The full original URL this link redirects to. */

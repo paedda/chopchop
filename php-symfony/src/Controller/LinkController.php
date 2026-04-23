@@ -71,7 +71,8 @@ class LinkController extends AbstractController
         $customCode = $data['custom_code'] ?? null;
         $expiresIn = $data['expires_in'] ?? null;
 
-        if (!$url || !is_string($url) || !filter_var($url, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $url)) {
+        $parsedHost = is_string($url) ? parse_url($url, PHP_URL_HOST) : null;
+        if (!$url || !is_string($url) || !filter_var($url, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $url) || !$parsedHost || !str_contains($parsedHost, '.')) {
             return $this->json(['error' => 'Invalid or missing URL'], Response::HTTP_BAD_REQUEST);
         }
 

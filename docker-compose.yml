@@ -38,15 +38,15 @@ services:
       db:
         condition: service_healthy
 
-  # ts-express:
-  #   build: ./ts-express
-  #   ports:
-  #     - "8003:8000"
-  #   environment:
-  #     DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  ts-express:
+    build: ./ts-express
+    ports:
+      - "8003:8000"
+    environment:
+      DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
+    depends_on:
+      db:
+        condition: service_healthy
 
   # elixir-phoenix:
   #   build: ./elixir-phoenix
