@@ -9,7 +9,7 @@ A URL shortener implemented in six backend languages against an identical API co
 | PHP | Symfony 7 | 8001 | ✅ done |
 | Python | FastAPI | 8002 | ✅ done |
 | TypeScript | Express | 8003 | ✅ done |
-| Elixir | Phoenix | 8004 | 🔜 planned |
+| Elixir | Phoenix | 8004 | ✅ done |
 | Java | Spring Boot | 8005 | 🔜 planned |
 | Go | net/http | 8006 | 🔜 planned |
 
@@ -248,7 +248,23 @@ chopchop/
 │       ├── router.ts
 │       ├── db.ts
 │       └── codegen.ts
-├── elixir-phoenix/         # planned
+├── elixir-phoenix/
+│   ├── Dockerfile
+│   ├── mix.exs
+│   ├── config/
+│   │   ├── config.exs
+│   │   └── runtime.exs
+│   └── lib/
+│       ├── chopchop/
+│       │   ├── application.ex
+│       │   ├── repo.ex
+│       │   ├── codegen.ex
+│       │   ├── links.ex
+│       │   └── links/{link,click}.ex
+│       └── chopchop_web/
+│           ├── endpoint.ex
+│           ├── router.ex
+│           └── controllers/link_controller.ex
 ├── java-springboot/        # planned
 └── go-nethttp/             # planned
 ```

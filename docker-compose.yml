@@ -48,15 +48,15 @@ services:
       db:
         condition: service_healthy
 
-  # elixir-phoenix:
-  #   build: ./elixir-phoenix
-  #   ports:
-  #     - "8004:8000"
-  #   environment:
-  #     DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  elixir-phoenix:
+    build: ./elixir-phoenix
+    ports:
+      - "8004:8000"
+    environment:
+      DATABASE_URL: postgresql://chopchop:chopchop@db:5432/chopchop
+    depends_on:
+      db:
+        condition: service_healthy
 
   # java-springboot:
   #   build: ./java-springboot
