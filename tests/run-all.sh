@@ -5,7 +5,8 @@ set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-BACKENDS="8001:PHP/Symfony 8002:Python/FastAPI 8003:TypeScript/Express 8004:Elixir/Phoenix 8005:Java/Spring Boot 8006:Go/net/http 8007:Ruby/Sinatra 8008:C#/ASP.NET Core"
+PORTS=(8001 8002 8003 8004 8005 8006 8007 8008)
+NAMES=("PHP/Symfony" "Python/FastAPI" "TypeScript/Express" "Elixir/Phoenix" "Java/Spring Boot" "Go/net/http" "Ruby/Sinatra" "C#/ASP.NET Core")
 
 green='\033[0;32m'
 red='\033[0;31m'
@@ -16,9 +17,9 @@ OVERALL_PASS=0
 OVERALL_FAIL=0
 FAILED_BACKENDS=()
 
-for ENTRY in $BACKENDS; do
-  PORT="${ENTRY%%:*}"
-  NAME="${ENTRY#*:}"
+for i in "${!PORTS[@]}"; do
+  PORT="${PORTS[$i]}"
+  NAME="${NAMES[$i]}"
   echo -e "\n${bold}── $NAME (port $PORT) ──────────────────────────────${reset}"
 
   if ! curl -s --max-time 2 "http://localhost:$PORT/health" > /dev/null 2>&1; then
@@ -43,7 +44,7 @@ done
 
 echo ""
 echo -e "${bold}══════════════════════════════════════════════════${reset}"
-echo -e "${bold}Overall: ${OVERALL_PASS} passed, ${OVERALL_FAIL} failed across ${#BACKENDS[@]} backends${reset}"
+echo -e "${bold}Overall: ${OVERALL_PASS} passed, ${OVERALL_FAIL} failed across ${#PORTS[@]} backends${reset}"
 
 if [ ${#FAILED_BACKENDS[@]} -eq 0 ]; then
   echo -e "${green}All backends passed.${reset}"

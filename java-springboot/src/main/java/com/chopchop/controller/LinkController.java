@@ -15,6 +15,7 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class LinkController {
 
     private static final Pattern CODE_PATTERN = Pattern.compile("^[a-zA-Z0-9\\-]{3,20}$");
     private static final int MAX_EXPIRES_IN = 2_592_000;
-    private static final DateTimeFormatter ISO = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+    private static final DateTimeFormatter ISO = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
 
     private final LinkRepository linkRepository;
     private final ClickRepository clickRepository;

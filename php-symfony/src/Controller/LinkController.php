@@ -38,7 +38,7 @@ class LinkController extends AbstractController
     #[Route('/health', name: 'health', methods: ['GET'])]
     public function health(): JsonResponse
     {
-        return $this->json([
+        return $this->respond([
             'status' => 'ok',
             'language' => 'php',
             'framework' => 'symfony',
@@ -73,19 +73,19 @@ class LinkController extends AbstractController
 
         $parsedHost = is_string($url) ? parse_url($url, PHP_URL_HOST) : null;
         if (!$url || !is_string($url) || !filter_var($url, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $url) || !$parsedHost || !str_contains($parsedHost, '.')) {
-            return $this->json(['error' => 'Invalid or missing URL'], Response::HTTP_BAD_REQUEST);
+            return $this->respond(['error' => 'Invalid or missing URL'], Response::HTTP_BAD_REQUEST);
         }
 
         if ($customCode !== null) {
             if (!is_string($customCode) || !preg_match('/^[a-zA-Z0-9\-]{3,20}$/', $customCode)) {
-                return $this->json(
+                return $this->respond(
                     ['error' => 'custom_code must be 3–20 alphanumeric characters or hyphens'],
                     Response::HTTP_BAD_REQUEST,
                 );
             }
 
             if ($this->linkRepository->findOneBy(['code' => $customCode]) !== null) {
-                return $this->json(['error' => 'Custom code already taken'], Response::HTTP_CONFLICT);
+                return $this->respond(['error' => 'Custom code already taken'], Response::HTTP_CONFLICT);
             }
 
             $code = $customCode;
@@ -96,7 +96,7 @@ class LinkController extends AbstractController
         $expiresAt = null;
         if ($expiresIn !== null) {
             if (!is_int($expiresIn) || $expiresIn <= 0 || $expiresIn > 2592000) {
-                return $this->json(
+                return $this->respond(
                     ['error' => 'expires_in must be a positive integer no greater than 2592000'],
                     Response::HTTP_BAD_REQUEST,
                 );
@@ -113,7 +113,7 @@ class LinkController extends AbstractController
         $this->em->persist($link);
         $this->em->flush();
 
-        return $this->json([
+        return $this->respond([
             'code' => $link->getCode(),
             'short_url' => $request->getSchemeAndHttpHost() . '/' . $link->getCode(),
             'url' => $link->getUrl(),
@@ -141,7 +141,7 @@ class LinkController extends AbstractController
         $link = $this->linkRepository->findByCodeWithClicks($code);
 
         if ($link === null) {
-            return $this->json(['error' => 'Link not found'], Response::HTTP_NOT_FOUND);
+            return $this->respond(['error' => 'Link not found'], Response::HTTP_NOT_FOUND);
         }
 
         $recentClicks = [];
@@ -153,7 +153,7 @@ class LinkController extends AbstractController
             ];
         }
 
-        return $this->json([
+        return $this->respond([
             'code' => $link->getCode(),
             'url' => $link->getUrl(),
             'created_at' => $link->getCreatedAt()->format(\DateTimeInterface::ATOM),
@@ -178,17 +178,24 @@ class LinkController extends AbstractController
      *                  404 if the code does not exist
      *                  410 if the link has passed its expiry time
      */
+    private function respond(mixed $data, int $status = Response::HTTP_OK): JsonResponse
+    {
+        $response = $this->json($data, $status);
+        $response->setEncodingOptions($response->getEncodingOptions() | \JSON_UNESCAPED_SLASHES);
+        return $response;
+    }
+
     #[Route('/{code}', name: 'redirect', methods: ['GET'])]
     public function redirectToUrl(string $code, Request $request): Response
     {
         $link = $this->linkRepository->findOneBy(['code' => $code]);
 
         if ($link === null) {
-            return $this->json(['error' => 'Link not found'], Response::HTTP_NOT_FOUND);
+            return $this->respond(['error' => 'Link not found'], Response::HTTP_NOT_FOUND);
         }
 
         if ($link->getExpiresAt() !== null && $link->getExpiresAt() < new \DateTimeImmutable()) {
-            return $this->json(['error' => 'Link has expired'], Response::HTTP_GONE);
+            return $this->respond(['error' => 'Link has expired'], Response::HTTP_GONE);
         }
 
         $click = (new Click())

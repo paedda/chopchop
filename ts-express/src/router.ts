@@ -8,6 +8,12 @@ const URL_REGEX = /^https?:\/\/[^/]+\.[^/]/i;
 const CODE_REGEX = /^[a-zA-Z0-9-]{3,20}$/;
 const MAX_EXPIRES_IN = 2_592_000;
 
+// Format a Date as ISO 8601 with +00:00 offset and no sub-seconds.
+function fmtDate(d: Date | null): string | null {
+  if (!d) return null;
+  return d.toISOString().replace(/\.\d+Z$/, "+00:00");
+}
+
 // Wraps an async route handler so that thrown errors reach Express's error handler.
 function wrap(
   fn: (req: Request, res: Response, next: NextFunction) => Promise<void>
@@ -75,8 +81,8 @@ router.post(
       code: link.code,
       short_url: `${host}/${link.code}`,
       url: link.url,
-      created_at: link.created_at.toISOString(),
-      expires_at: link.expires_at ? link.expires_at.toISOString() : null,
+      created_at: fmtDate(link.created_at),
+      expires_at: fmtDate(link.expires_at),
     });
   })
 );
@@ -105,7 +111,7 @@ router.get(
 
     const totalClicks = clicksResult.rowCount ?? 0;
     const recentClicks = clicksResult.rows.slice(0, 10).map((c) => ({
-      clicked_at: c.clicked_at.toISOString(),
+      clicked_at: fmtDate(c.clicked_at),
       referer: c.referer,
       user_agent: c.user_agent,
     }));
@@ -113,8 +119,8 @@ router.get(
     res.json({
       code: link.code,
       url: link.url,
-      created_at: link.created_at.toISOString(),
-      expires_at: link.expires_at ? link.expires_at.toISOString() : null,
+      created_at: fmtDate(link.created_at),
+      expires_at: fmtDate(link.expires_at),
       total_clicks: totalClicks,
       recent_clicks: recentClicks,
     });

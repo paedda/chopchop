@@ -1,7 +1,14 @@
 """Pydantic request and response schemas."""
-from datetime import datetime
+from datetime import datetime, timezone
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_serializer
+
+
+def _fmt_dt(dt: datetime | None) -> str | None:
+    """Format a datetime as ISO 8601 with +00:00 offset and no sub-seconds."""
+    if dt is None:
+        return None
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00")
 
 
 class ShortenRequest(BaseModel):
@@ -26,6 +33,10 @@ class ShortenResponse(BaseModel):
     created_at: datetime
     expires_at: datetime | None
 
+    @field_serializer("created_at", "expires_at")
+    def serialize_dt(self, dt: datetime | None) -> str | None:
+        return _fmt_dt(dt)
+
 
 class ClickSchema(BaseModel):
     """A single click entry as returned in the stats response."""
@@ -35,6 +46,10 @@ class ClickSchema(BaseModel):
     clicked_at: datetime
     referer: str | None
     user_agent: str | None
+
+    @field_serializer("clicked_at")
+    def serialize_dt(self, dt: datetime | None) -> str | None:
+        return _fmt_dt(dt)
 
 
 class StatsResponse(BaseModel):
@@ -48,6 +63,10 @@ class StatsResponse(BaseModel):
     expires_at: datetime | None
     total_clicks: int
     recent_clicks: list[ClickSchema]
+
+    @field_serializer("created_at", "expires_at")
+    def serialize_dt(self, dt: datetime | None) -> str | None:
+        return _fmt_dt(dt)
 
 
 class HealthResponse(BaseModel):

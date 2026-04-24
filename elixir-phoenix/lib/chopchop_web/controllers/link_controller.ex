@@ -25,13 +25,13 @@ defmodule ChopchopWeb.LinkController do
 
           conn
           |> put_status(201)
-          |> json(%{
-            code: link.code,
-            short_url: "#{base}/#{link.code}",
-            url: link.url,
-            created_at: format_datetime(link.created_at),
-            expires_at: format_datetime(link.expires_at)
-          })
+          |> json(%Jason.OrderedObject{values: [
+            {"code", link.code},
+            {"short_url", "#{base}/#{link.code}"},
+            {"url", link.url},
+            {"created_at", format_datetime(link.created_at)},
+            {"expires_at", format_datetime(link.expires_at)}
+          ]})
 
         {:error, _changeset} ->
           conn |> put_status(500) |> json(%{error: "Failed to create link"})
